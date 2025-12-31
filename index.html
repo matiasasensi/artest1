@@ -2,59 +2,30 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>AR QR Test Móvil</title>
+  <title>AR NFT QR Test</title>
+
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
-  <style>
-    body { margin: 0; overflow: hidden; }
-    #qr-video {
-      position: absolute;
-      top: -10000px;
-      width: 1px;
-      height: 1px;
-    }
-  </style>
+
+  <!-- AR.js NFT -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 </head>
-<body>
 
-<video id="qr-video" autoplay muted playsinline></video>
+<body style="margin:0; overflow:hidden;">
 
-<a-scene embedded>
-  <a-box id="cubo" position="0 0.5 -1" material="color: red" visible="false"></a-box>
-  <a-entity camera></a-entity>
-</a-scene>
+  <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
 
-<script>
-const video = document.getElementById('qr-video');
-const cubo = document.getElementById('cubo');
+    <!-- NFT Marker -->
+    <a-nft type="nft" url="materiales/qr/qr" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
 
-navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-.then(stream => {
-  video.srcObject = stream;
-  video.onloadedmetadata = () => {
-    video.play();
-    requestAnimationFrame(tick);
-  };
-})
-.catch(err => console.error("No se pudo acceder a la cámara:", err));
+      <!-- Cubo rojo -->
+      <a-box position="0 0.5 0" rotation="0 45 0" material="color: red" scale="0.5 0.5 0.5"></a-box>
 
-function tick() {
-  if (video.readyState === video.HAVE_ENOUGH_DATA) {
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    </a-nft>
 
-    const code = jsQR(imageData.data, canvas.width, canvas.height);
-    if (code) {
-      cubo.setAttribute('visible', true);
-    }
-  }
-  requestAnimationFrame(tick);
-}
-</script>
+    <a-entity camera></a-entity>
+  </a-scene>
 
 </body>
 </html>
+
