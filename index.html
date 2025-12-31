@@ -4,39 +4,40 @@
 <meta charset="utf-8">
 <title>MindAR QR Test</title>
 
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: black;
-  }
-  a-scene {
-    width: 100%;
-    height: 100%;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: black;
+}
+a-scene {
+  width: 100%;
+  height: 100%;
+}
 </style>
 </head>
 
 <body>
 
 <a-scene
-  mindar-image="imageTargetSrc: targets.mind;"
-  renderer="colorManagement: true, physicallyCorrectLights"
+  mindar-image="imageTargetSrc: targets.mind; uiScanning: true;"
   vr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: false">
+  device-orientation-permission-ui="enabled: false"
+  renderer="colorManagement: true">
 
   <a-camera
     position="0 0 0"
     look-controls="enabled: false"
-    cursor="rayOrigin: mouse">
+    camera="active: true"
+    mindar-image-camera="facingMode: environment">
   </a-camera>
 
   <a-entity mindar-image-target="targetIndex: 0">
