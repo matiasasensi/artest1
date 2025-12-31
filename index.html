@@ -2,31 +2,48 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>AR con QR real</title>
+  <title>AR QR Test con Cubo</title>
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    /* Video casi invisible pero funcional */
+    #qr-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0.01;
+      z-index: -1;
+    }
+  </style>
 </head>
-<body style="margin:0; overflow:hidden;">
 
-<!-- Video para el QR -->
-<video id="qr-video" style="display:none;"></video>
+<body>
 
-<!-- Escena A-Frame -->
+<video id="qr-video" autoplay muted playsinline></video>
+
 <a-scene embedded>
-  <a-entity id="modelo" gltf-model="url(materiales/fakemogus.glb)" scale="0.5 0.5 0.5" rotation="0 180 0" visible="false"></a-entity>
+  <!-- Cubo rojo para probar el QR -->
+  <a-box id="cubo" position="0 0.5 -1" material="color: red" visible="false"></a-box>
+
   <a-entity camera></a-entity>
 </a-scene>
 
 <script>
 const video = document.getElementById('qr-video');
-const modelo = document.getElementById('modelo');
+const cubo = document.getElementById('cubo');
 
+// Acceder a la cámara trasera
 navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
 .then(stream => {
   video.srcObject = stream;
-  video.setAttribute('playsinline', true);
   video.play();
   requestAnimationFrame(tick);
+})
+.catch(err => {
+  console.error("No se pudo acceder a la cámara:", err);
 });
 
 function tick() {
@@ -40,8 +57,8 @@ function tick() {
 
     const code = jsQR(imageData.data, canvas.width, canvas.height);
     if (code) {
-      // QR detectado → mostrar modelo
-      modelo.setAttribute('visible', true);
+      // QR detectado → mostrar cubo
+      cubo.setAttribute('visible', true);
     }
   }
   requestAnimationFrame(tick);
